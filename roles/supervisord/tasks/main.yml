@@ -1,0 +1,43 @@
+---
+- stat:
+    path: /usr/bin/supervisord
+  register: supervisord_stat
+- include: install.yml
+  when: "supervisord_stat.stat.exists == False"
+
+- name: 创建 Supervisord 目录
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{SUPERVISORD_CONFIG_DIR}}"
+    - "{{SUPERVISORD_LOG_DIR}}"
+
+- name: 拷贝 init.d 服务配置文件
+  template:
+    src: supervisord.sh
+    dest: "/etc/init.d/supervisord"
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart supervisord
+
+- name: 拷贝配置文件
+  template:
+    src: supervisord.conf
+    dest: "{{SUPERVISORD_CONFIG_FILE}}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart supervisord
+
+- name: 启动 Supervisrd 服务
+  service:
+    name: supervisord
+    state: started
+
+- name: 设置 Supervisord 自动启动
+  service:
+    name: supervisord
+    enabled: yes

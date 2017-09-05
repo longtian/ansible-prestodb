@@ -1,0 +1,30 @@
+---
+- name: 卸载老版本的 mysql-libs
+  yum:
+    disablerepo: "*"
+    name: "mysql-libs"
+    state: absent
+
+- name: 安装编译依赖
+  yum:
+    name: python-devel,gcc,numactl,perl,perl-libs
+    enablerepo: "testin"
+    disablerepo: "*"
+    state: present
+
+- name: 安装 MySQL 依赖
+  with_items: "{{MYSQL_PACKAGES}}"
+  yum:
+    enablerepo: "testin"
+    disablerepo: "*"
+    name: "{{item}}"
+    state: present
+
+- unarchive:
+    src: "MySQL-python-1.2.5.tar.gz"
+    dest: "/tmp"
+
+- name: 安装 mysql-python
+  command: python setup.py install
+  args:
+    chdir: "/tmp/MySQL-python-1.2.5"

@@ -1,0 +1,38 @@
+---
+- hosts: all
+  roles:
+    - base
+
+- hosts: mysql
+  tasks:
+    - name: 创建 verifier 数据库
+      mysql_db:
+        login_host: 127.0.0.1
+        login_port: 3306
+        name: "verifier"
+        encoding: utf8
+        collation: utf8_general_ci
+        state: present
+    - name: 拷贝建表语句
+      copy:
+        src: "./templates/verifier.sql"
+        dest: "/tmp/verifier.sql"
+    - name: 执行 verifier 建表语句
+      mysql_db:
+        login_host: 127.0.0.1
+        login_port: 3306
+        name: verifier
+        state: import
+        target: "/tmp/verifier.sql"
+
+- hosts: presto-3
+  tasks:
+    - set_fact:
+        mysql_host: "{{ (hostvars[groups['mysql']|first]).lan_ip }}:{{ MYSQL_PORT }}"
+    - copy:
+        src: presto-verifier-0.183-executable.jar
+        dest: /tmp/presto-verifier-0.183-executable.jar
+    - template:
+        src: "config.properties"
+        dest: /tmp/config.properties
+    - command: "{{JAVA_HOME}}/bin/java -jar /tmp/presto-verifier-0.183-executable.jar /tmp/config.properties"

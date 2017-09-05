@@ -1,0 +1,39 @@
+- name: 创建 MySQL 数据目录
+  file:
+    path: "{{MYSQL_DATA_DIR}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: 拷贝配置文件
+  template:
+    src: "my.cnf"
+    dest: "/etc/my.cnf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 初始化 mysqld
+  shell: mysqld --initialize-insecure
+  args:
+    creates: "{{MYSQL_DATA_DIR}}/performance_schema"
+
+- name: 启动 MySQL
+  service:
+    name: mysqld
+    state: started
+    enabled: true
+
+- wait_for:
+    port: 3306
+    delay: 3
+
+- mysql_user:
+    login_host: 127.0.0.1
+    login_port: 3306
+    name: "{{MYSQL_USERNAME}}"
+    password: "{{MYSQL_PASSWORD}}"
+    host: '%'
+    priv: '*.*:ALL,GRANT'
+    state: present

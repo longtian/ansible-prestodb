@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <!--namenode所在机器ip-->
+        <value>hdfs://{{namenode_hostname}}:10000</value>
+    </property>
+    <property>
+        <!--临时目录-->
+        <name>hadoop.tmp.dir</name>
+        <value>{{HADOOP_TMP_DIR}}</value>
+    </property>
+    <property>
+        <!--流文件的缓冲区大小-->
+        <name>io.file.buffer.size</name>
+        <value>131702</value>
+    </property>
+</configuration>

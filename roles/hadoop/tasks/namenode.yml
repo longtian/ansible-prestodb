@@ -1,0 +1,18 @@
+---
+- name: 格式化 Namenode 节点
+  command: "{{HADOOP_HOME}}/bin/hdfs namenode -format"
+  args:
+    creates: "{{HADOOP_NAMENODE_DIR}}/current/VERSION"
+- name: 生成 Namenode 的 Supervisord 配置文件
+  template:
+    src: services/namenode.ini.j2
+    dest: "{{SUPERVISORD_CONFIG_DIR}}/namenode.ini"
+- name: 启动 Namenode 节点
+  supervisorctl:
+    name: namenode
+    state: restarted
+- name: 等待 10000 端口
+  wait_for:
+    host: "{{lan_ip}}"
+    port: 10000
+    delay: 5

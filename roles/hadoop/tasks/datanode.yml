@@ -1,0 +1,14 @@
+---
+- name: 生成 Datanode 的 Supervisord 配置文件
+  template:
+    src: services/datanode.ini.j2
+    dest: "{{SUPERVISORD_CONFIG_DIR}}/datanode.ini"
+- name: 启动 Datanode 节点
+  supervisorctl:
+    name: datanode
+    state: restarted
+- name: 等待 50010 端口
+  wait_for:
+    host: "{{lan_ip}}"
+    port: 50010
+    delay: 5

@@ -1,0 +1,11 @@
+---
+- stat:
+    path: "/usr/sbin/mysqld"
+  register: "mysqld_stats"
+
+# 只有 mysqld 不存在的时候安装
+- include: install.yml
+  when: not mysqld_stats.stat.exists
+
+- include: clean.yml
+- include: configure.yml

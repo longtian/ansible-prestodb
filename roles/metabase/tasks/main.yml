@@ -1,0 +1,21 @@
+---
+- name: 创建 Metabase 目录
+  file:
+    path: "{{item}}"
+    state: "directory"
+  with_items:
+    - "{{METABASE_HOME}}"
+    - "{{METABASE_DATA_DIR}}"
+    - "{{METABASE_LOGS_DIR}}"
+- name: 下载 Metabase
+  copy:
+    src: "{{METABASE_DOWNLOAD_URL}}"
+    dest: "{{METABASE_HOME}}"
+- name: 生成 Metabase 的 Supervisord 文件
+  template:
+    src: "metabase.ini"
+    dest: "{{SUPERVISORD_CONFIG_DIR}}/metabase.ini"
+- name: 重启 Metabase
+  supervisorctl:
+    name: metabase
+    state: restarted

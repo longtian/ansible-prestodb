@@ -1,0 +1,3 @@
+{% for item in groups["datanode"] %}
+{{hostvars[item].ansible_hostname}}
+{% endfor %}

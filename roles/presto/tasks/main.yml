@@ -1,0 +1,57 @@
+---
+- name: 分配 Presto 角色
+  set_fact:
+    presto_role: "{{'coordinator' if (presto_coordinator is defined and presto_coordinator) else 'worker'}}"
+
+- name: 设置 Coordinator 的 Hostname
+  set_fact:
+    presto_coordinator_hostname: "{{groups['all'] | map('extract',hostvars) | selectattr('presto_role', 'equalto', 'coordinator') |  map(attribute='lan_ip') | first}}"
+
+- name: 下载 Presto
+  unarchive:
+    src: "{{PRESTO_DOWNLOAD_URL}}"
+    dest: "{{ROOT}}"
+    creates: "{{PRESTO_HOME}}"
+
+- name: 创建 Presto 目录
+  file:
+    path: "{{item}}"
+    state: "directory"
+  with_items:
+    - "{{PRESTO_DATA_DIR}}"
+    - "{{PRESTO_DATA_DIR}}/logs"
+    - "{{PRESTO_HOME}}/etc"
+    - "{{PRESTO_HOME}}/etc/catalog"
+
+- name: 生成 Presto 配置文件
+  template:
+    src: "{{item}}"
+    dest: "{{PRESTO_HOME}}/etc/{{item}}"
+  with_items:
+    - "node.properties"
+    - "jvm.config"
+    - "log.properties"
+    - "node.properties"
+    - "catalog/hive.properties"
+
+- name: 生成 Presto 角色配置文件
+  template:
+    src: "{{presto_role}}-config.properties"
+    dest: "{{PRESTO_HOME}}/etc/config.properties"
+
+- name: 生成 Presto 的 Catalog 文件
+  template:
+    src: "catalog/{{item}}"
+    dest: "{{PRESTO_HOME}}/etc/catalog/{{item}}"
+  with_items:
+    - "hive.properties"
+
+- name: 生成 Presto 的 Supervisord 配置文件
+  template:
+    src: presto.ini
+    dest: "{{SUPERVISORD_CONFIG_DIR}}/presto.ini"
+
+- name: 重启 Supervisord
+  supervisorctl:
+    name: presto
+    state: restarted

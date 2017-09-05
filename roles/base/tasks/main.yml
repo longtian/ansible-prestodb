@@ -1,0 +1,57 @@
+---
+- set_fact:
+    lan_ip: "{{ansible_default_ipv4.address}}"
+
+- set_fact:
+    namenode_hostname: "{{(hostvars[groups['namenode']|first]).lan_ip}}"
+
+- name: 使当前主机名解析到本地
+  lineinfile:
+    dest: /etc/hosts
+    state: present
+    regexp: '#ansible-managed-localhost$'
+    line: '127.0.0.1 {{ansible_hostname}} #ansible-managed-localhost'
+
+- name: 配置节点之间的域名解析
+  lineinfile:
+    dest: /etc/hosts
+    state: present
+    regexp: '{{hostvars[item].lan_ip}}$'
+    line: '{{hostvars[item].lan_ip}} {{hostvars[item].ansible_hostname}} #ansible-{{hostvars[item].lan_ip}}'
+  when: "item != inventory_hostname"
+  with_items: "{{groups['all']}}"
+
+- name: 下载 libselinux
+  unarchive:
+    src: "selinux.tar.gz"
+    dest: "/tmp"
+
+- name: 安装 libselinux
+  yum:
+    disablerepo: "*"
+    name: "/tmp/selinux/{{item}}"
+    state: "present"
+  with_items:
+    - "libselinux-utils-2.0.94-7.el6.x86_64.rpm"
+    - "libselinux-2.0.94-7.el6.x86_64.rpm"
+    - "libselinux-python-2.0.94-7.el6.x86_64.rpm"
+
+- name: 关闭 selinux （不需要重启）
+  selinux:
+    state: disabled
+
+- name: 关闭防火墙
+  service:
+    name: iptables
+    state: stopped
+
+- file:
+    path: "{{ROOT}}"
+    state: "directory"
+
+- name: 添加私有的 Repo
+  yum_repository:
+    name: testin
+    baseurl: http://yum.testin.cc:8006/
+    description: testin
+    gpgcheck: no

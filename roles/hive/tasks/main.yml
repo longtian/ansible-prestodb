@@ -1,0 +1,54 @@
+---
+- name: 下载 Hive
+  unarchive:
+    creates: "{{HIVE_HOME}}"
+    src: "{{HIVE_DOWNLOAD_URL}}"
+    dest: "{{ROOT}}"
+
+- name: 添加 HIVE_HOME 环境变量
+  lineinfile:
+    dest: ~/.bashrc
+    state: present
+    regexp: ^export\sHIVE_HOME=
+    line: "export HIVE_HOME={{HIVE_HOME}}"
+    insertbefore: ^export\sJAVA_HOME=
+
+- name: 添加 Hive 工具到 Path
+  lineinfile:
+    dest: ~/.bashrc
+    state: present
+    regexp: ^export\sPATH=\$HIVE_HOME\/bin:\$PATH
+    line: export PATH=$HIVE_HOME/bin:$PATH
+    insertafter: ^export\sPATH=
+
+- name: 复制 MySQL JDBC 驱动
+  copy:
+    src: "mysql-connector-java-5.1.43-bin.jar"
+    dest: "{{HIVE_HOME}}/lib/mysql-connector-java-5.1.43-bin.jar"
+
+- template:
+    src: hive-default.xml
+    dest: "{{HIVE_HOME}}/conf/hive-site.xml"
+
+- name: 创建 Hive 目录
+  file:
+    path: "{{item}}"
+    state: "directory"
+  with_items:
+    - "{{HIVE_SCRATCH_DIR}}"
+    - "{{HIVE_RESOURCES_DIR}}"
+    - "{{HIVE_LOG_DIR}}/query"
+    - "{{HIVE_LOG_DIR}}/operation_logs"
+
+- command: "{{HIVE_HOME}}/bin/schematool -dbType mysql -initSchema"
+  environment:
+    JAVA_HOME: "{{ JAVA_HOME }}"
+
+- template:
+    src: "hive-metastore.ini"
+    dest: "{{SUPERVISORD_CONFIG_DIR}}/hive-metastore.ini"
+
+- supervisorctl:
+    name: "hive-metastore"
+    state: "restarted"
+

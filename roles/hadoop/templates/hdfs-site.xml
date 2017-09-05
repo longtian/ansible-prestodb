@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:{{HADOOP_NAMENODE_DIR}}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:{{HADOOP_DATANODE_DIR}}</value>
+    </property>
+    <property>
+        <name>dfs.replication</name>
+        <value>{{HADOOP_REPLICATION}}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.secondary.http-address</name>
+        <!--namenode所在机器ip和host，host命名不能包含下划线-->
+        <value>{{namenode_hostname}}:10001</value>
+    </property>
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+    </property>
+</configuration>

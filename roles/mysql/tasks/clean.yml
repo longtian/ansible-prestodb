@@ -1,0 +1,14 @@
+---
+- name: 停止 MySQL 服务
+  service:
+    name: mysqld
+    state: stopped
+  ignore_errors: true
+- name: 清空 MySQL 数据目录
+  file:
+    path: "{{MYSQL_DATA_DIR}}"
+    state: absent
+- name: 清空 MySQL 日志
+  file:
+    path: "/var/log/mysqld.log"
+    state: absent

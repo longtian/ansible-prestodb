@@ -1,0 +1,21 @@
+galaxy_info:
+  author: longtian
+
+  description: Ansible repo for setting up Prestodb.
+
+  license: MIT
+
+  min_ansible_version: 1.8
+
+  platforms:
+
+  - name: CentOS
+    versions:
+    - 6.5
+
+  galaxy_tags:
+    - hadoop
+    - prestodb
+    - hive
+
+dependencies: []

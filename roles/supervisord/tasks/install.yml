@@ -1,0 +1,6 @@
+---
+- include: install_python_package.yml
+  with_items:
+    - "setuptools-36.3.0"
+    - "meld3-1.0.2"
+    - "supervisor-3.3.3"

@@ -1,0 +1,4 @@
+[program:datanode]
+command={{HADOOP_HOME}}/bin/hdfs datanode
+stdout_logfile={{HADOOP_LOGS}}/datanode-service.log
+stderr_logfile={{HADOOP_LOGS}}/datanode-error.log

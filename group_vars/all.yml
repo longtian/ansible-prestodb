@@ -1,0 +1,34 @@
+---
+ROOT: "/data"
+
+JAVA_HOME: "{{ROOT}}/jdk1.8.0_131"
+JOLOKIA_FILE: "{{JAVA_HOME}}/lib"
+
+SUPERVISORD_CONFIG_DIR: /etc/supervisor/config.d/
+SUPERVISORD_CONFIG_FILE: /etc/supervisor/supervisord.conf
+SUPERVISORD_LOG_DIR: /var/log/supervisord
+SUPERVISORD_PID_FILE: /tmp/supervisord.pid
+SUPERVISORD_LOCK_FILE: /var/lock/subsys/supervisord
+
+HADOOP_HOME: "{{ROOT}}/hadoop-2.7.3"
+HADOOP_LOGS: "{{ROOT}}/hadoop/logs"
+HADOOP_TMP_DIR: "{{ROOT}}/hadoop/tmp"
+HADOOP_NAMENODE_DIR: "{{ROOT}}/hadoop/hdfs/name"
+HADOOP_DATANODE_DIR: "{{ROOT}}/hadoop/hdfs/data"
+HADOOP_REPLICATION: 2
+
+MYSQL_PORT: 3306
+MYSQL_DATA_DIR: "{{ROOT}}/mysql"
+MYSQL_USERNAME: "mysql"
+MYSQL_PASSWORD: "mysql"
+MYSQL_PACKAGES: [
+  "mysql-community-common",
+  "mysql-community-libs",
+  "mysql-community-client",
+  "mysql-community-server",
+  "mysql-community-devel"
+]
+
+HIVE_METASTORE_PORT: 9083
+
+ZEPPELIN_HOME: "{{ROOT}}/zeppelin-0.7.2-bin-all"

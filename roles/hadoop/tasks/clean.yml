@@ -1,0 +1,5 @@
+---
+- name: 清空 Hadoop 文件夹
+  file:
+    path: "{{ROOT}}/hadoop"
+    state: absent

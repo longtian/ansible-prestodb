@@ -1,0 +1,5 @@
+---
+PRESTO_DOWNLOAD_URL: "presto-server-0.183.tar.gz"
+PRESTO_HOME: "{{ROOT}}/presto-server-0.183"
+PRESTO_DATA_DIR: "/data/presto"
+PRESTO_PORT: 8002

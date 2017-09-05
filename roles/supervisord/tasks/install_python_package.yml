@@ -1,0 +1,9 @@
+---
+- name: "解压 {{item}}"
+  unarchive:
+    src: "{{item}}.tar.gz"
+    dest: "/tmp"
+- name: "安装 {{item}}"
+  command: " python setup.py install"
+  args:
+    chdir: "/tmp/{{item}}"

@@ -1,0 +1,69 @@
+---
+- hosts: all
+  roles:
+    - base
+#    - supervisord
+#    - jdk
+#
+#- hosts: hadoop
+#  roles:
+#    - hadoop
+#
+#- hosts: namenode
+#  tasks:
+#    - command: "{{ item }}"
+#      with_items:
+#        - "{{HADOOP_HOME}}/bin/hadoop fs -mkdir -p /tmp/hive"
+#        - "{{HADOOP_HOME}}/bin/hadoop fs -mkdir -p /user/hive/warehouse"
+#        - "{{HADOOP_HOME}}/bin/hadoop fs -chmod 755 /user/hive/warehouse"
+#        - "{{HADOOP_HOME}}/bin/hadoop fs -chmod 777 /tmp/hive/"
+#
+#- hosts: mysql
+#  roles:
+#    - mysql
+#  tasks:
+#    - name: 创建 Hive 数据库
+#      mysql_db:
+#        login_host: 127.0.0.1
+#        login_port: 3306
+#        name: "hive"
+#        encoding: utf8
+#        collation: utf8_general_ci
+#        state: present
+#    - name: 创建 Hive 数据库
+#      mysql_db:
+#        login_host: 127.0.0.1
+#        login_port: 3306
+#        name: "verifier"
+#        encoding: utf8
+#        collation: utf8_general_ci
+#        state: present
+#    - name: 拷贝建表语句
+#      copy:
+#        src: "./roles/presto/files/verifier.sql"
+#        dest: "/tmp/verifier.sql"
+#    - name: 执行建表语句
+#      mysql_db:
+#        login_host: 127.0.0.1
+#        login_port: 3306
+#        name: verifier
+#        state: import
+#        target: "/tmp/verifier.sql"
+#
+#- hosts: hive
+#  roles:
+#    - {
+#      role: hive,
+#      mysql_host: "{{ (hostvars[groups['mysql']|first]).lan_ip }}:{{ MYSQL_PORT }}"
+#    }
+#
+#- hosts: presto
+#  roles:
+#    - {
+#      role: presto,
+#      hivemetastore_host:  "{{ (hostvars[groups['hive']|first]).lan_ip }}:{{ HIVE_METASTORE_PORT }}"
+#    }
+
+- hosts: zeppelin
+  roles:
+    - zeppelin

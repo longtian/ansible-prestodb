@@ -1,0 +1,3 @@
+# Java环境变量
+export JAVA_HOME={{JAVA_HOME}}
+export HADOOP_LOG_DIR={{HADOOP_LOGS}}/$USER
