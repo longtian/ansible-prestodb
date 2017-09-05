@@ -25,10 +25,6 @@ presto-[1:3]
 [metabase]
 presto-3
 
-[hadoop:children]
-datanode
-namenode
-
 [phpmyadmin]
 presto-2
 

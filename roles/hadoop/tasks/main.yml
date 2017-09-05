@@ -49,3 +49,4 @@
 
 - name: 尝试上传本地的 Hosts 文件到 HDFS
   command: "{{HADOOP_HOME}}/bin/hdfs dfs -put /etc/hosts /hosts-{{ansible_default_ipv4.address}}"
+

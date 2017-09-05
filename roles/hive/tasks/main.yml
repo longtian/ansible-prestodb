@@ -21,16 +21,17 @@
     line: export PATH=$HIVE_HOME/bin:$PATH
     insertafter: ^export\sPATH=
 
-- name: 复制 MySQL JDBC 驱动
+- name: 下载 MySQL JDBC 驱动
   copy:
     src: "mysql-connector-java-5.1.43-bin.jar"
     dest: "{{HIVE_HOME}}/lib/mysql-connector-java-5.1.43-bin.jar"
 
-- template:
+- name: 生成 Hive 配置文件
+  template:
     src: hive-default.xml
     dest: "{{HIVE_HOME}}/conf/hive-site.xml"
 
-- name: 创建 Hive 目录
+- name: 创建 Hive 本地目录
   file:
     path: "{{item}}"
     state: "directory"
@@ -40,15 +41,39 @@
     - "{{HIVE_LOG_DIR}}/query"
     - "{{HIVE_LOG_DIR}}/operation_logs"
 
-- command: "{{HIVE_HOME}}/bin/schematool -dbType mysql -initSchema"
+- name: 创建 Hive 在 HDFS 上的目录
+  command: "{{ item }}"
+  run_once: True
+  delegate_to: "{{ groups['namenode'] | first }}"
+  with_items:
+    - "{{HADOOP_HOME}}/bin/hadoop fs -mkdir -p /tmp/hive"
+    - "{{HADOOP_HOME}}/bin/hadoop fs -mkdir -p /user/hive/warehouse"
+    - "{{HADOOP_HOME}}/bin/hadoop fs -chmod 755 /user/hive/warehouse"
+    - "{{HADOOP_HOME}}/bin/hadoop fs -chmod 777 /tmp/hive/"
+
+- name: 创建 Hive MySQL 数据库
+  run_once: True
+  delegate_to: "{{ groups['mysql'] | first }}"
+  mysql_db:
+    login_host: 127.0.0.1
+    login_port: 3306
+    name: "hive"
+    encoding: utf8
+    collation: utf8_general_ci
+    state: present
+
+- name: 初始化 Hive 的 Schema
+  command: "{{HIVE_HOME}}/bin/schematool -dbType mysql -initSchema"
   environment:
     JAVA_HOME: "{{ JAVA_HOME }}"
 
-- template:
+- name: 生成 MetaStore 的 Supervisord 配置文件
+  template:
     src: "hive-metastore.ini"
     dest: "{{SUPERVISORD_CONFIG_DIR}}/hive-metastore.ini"
 
-- supervisorctl:
+- name: 重启 Hive Metastore
+  supervisorctl:
     name: "hive-metastore"
     state: "restarted"
 
