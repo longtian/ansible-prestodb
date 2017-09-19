@@ -1,5 +1,0 @@
----
-- unarchive:
-    src: "zeppelin-0.7.2-bin-all.tgz"
-    dest: "{{ROOT}}"
-    creates: "{{ZEPPELIN_HOME}}"
