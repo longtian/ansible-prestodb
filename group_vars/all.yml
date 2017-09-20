@@ -30,5 +30,7 @@ MYSQL_PACKAGES: [
 ]
 
 HIVE_METASTORE_PORT: 9083
+HIVE_VERSION: "2.3.0"
+HIVE_HOME: "{{ROOT}}/apache-hive-{{HIVE_VERSION}}-bin"
 
 ZEPPELIN_HOME: "{{ROOT}}/zeppelin-0.7.2-bin-all"

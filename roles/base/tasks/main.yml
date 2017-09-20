@@ -44,8 +44,10 @@
   service:
     name: iptables
     state: stopped
+    enabled: no
 
-- file:
+- name: 创建根目录
+  file:
     path: "{{ROOT}}"
     state: "directory"
 

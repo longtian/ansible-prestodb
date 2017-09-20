@@ -26,3 +26,7 @@
       role: presto,
       hivemetastore_host:  "{{ (hostvars[groups['hive']|first]).lan_ip }}:{{ HIVE_METASTORE_PORT }}"
     }
+
+- hosts: presto-3
+  roles:
+    - metabase

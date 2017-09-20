@@ -247,7 +247,7 @@
   </property>
   <property>
     <name>hive.exec.dynamic.partition.mode</name>
-    <value>strict</value>
+    <value>nonstrict</value>
     <description>
       In strict mode, the user must specify at least one static partition
       in case the user accidentally overwrites all partitions.

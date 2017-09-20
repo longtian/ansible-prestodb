@@ -22,8 +22,5 @@ presto-2
 [presto]
 presto-[1:3]
 
-[metabase]
-presto-3
-
 [phpmyadmin]
 presto-2

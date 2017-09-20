@@ -1,0 +1,18 @@
+---
+- template:
+    src: "generate.sh"
+    dest: "/tmp/generate_events_{{count}}.sh"
+    mode: "755"
+
+- name: "生成 {{count}} 条数据"
+  raw: "/tmp/generate_events_{{count}}.sh >> /tmp/events_{{count}}.csv"
+  args:
+    executable: /bin/bash
+
+- name: "生成 events_{{count}} hql 文件"
+  template:
+    src: "events.hql"
+    dest: "/tmp/events_{{count}}.hql"
+
+- name: "导入 events_{{count}}"
+  command: "{{HIVE_HOME}}/bin/hive -f /tmp/events_{{count}}.hql"

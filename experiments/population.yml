@@ -1,0 +1,11 @@
+---
+- name: 拷贝 population 数据
+  copy:
+    src: "population.csv"
+    dest: "/tmp/population.csv"
+- name: 拷贝 population 建表语句
+  copy:
+    src: "init.hql"
+    dest: "/tmp/init.hql"
+- name: 导入 population 表
+  command: "{{HIVE_HOME}}/bin/hive -f /tmp/init.hql"

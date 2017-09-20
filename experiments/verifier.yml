@@ -1,7 +1,5 @@
 ---
-- hosts: all
-  roles:
-    - base
+
 
 - hosts: mysql
   tasks:
@@ -25,14 +23,4 @@
         state: import
         target: "/tmp/verifier.sql"
 
-- hosts: presto-3
-  tasks:
-    - set_fact:
-        mysql_host: "{{ (hostvars[groups['mysql']|first]).lan_ip }}:{{ MYSQL_PORT }}"
-    - copy:
-        src: presto-verifier-0.183-executable.jar
-        dest: /tmp/presto-verifier-0.183-executable.jar
-    - template:
-        src: "config.properties"
-        dest: /tmp/config.properties
-    - command: "{{JAVA_HOME}}/bin/java -jar /tmp/presto-verifier-0.183-executable.jar /tmp/config.properties"
+

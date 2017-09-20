@@ -1,0 +1,10 @@
+---
+- hosts: presto-2
+  tasks:
+    - include: "./experiments/events.yml"
+      vars:
+        - count: "{{item}}"
+      with_items:
+        - 100
+        - 10000
+        - 1000000
