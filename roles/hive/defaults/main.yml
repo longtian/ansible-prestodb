@@ -6,3 +6,5 @@ HIVE_HOME: "{{ROOT}}/apache-hive-{{HIVE_VERSION}}-bin"
 HIVE_SCRATCH_DIR: "{{ROOT}}/hive/iotmp"
 HIVE_RESOURCES_DIR: "{{ROOT}}/hive/resources"
 HIVE_LOG_DIR: "{{ROOT}}/hive/logs"
+HIVE_MAX_DYNAMIC_PARTITIONS_PERNODE: 1000
+HIVE_DYNAMIC_PARTITION_MODE: "nonstrict"

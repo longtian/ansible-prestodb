@@ -247,7 +247,7 @@
   </property>
   <property>
     <name>hive.exec.dynamic.partition.mode</name>
-    <value>nonstrict</value>
+    <value>{{HIVE_DYNAMIC_PARTITION_MODE}}</value>
     <description>
       In strict mode, the user must specify at least one static partition
       in case the user accidentally overwrites all partitions.
@@ -261,7 +261,7 @@
   </property>
   <property>
     <name>hive.exec.max.dynamic.partitions.pernode</name>
-    <value>100</value>
+    <value>{{HIVE_MAX_DYNAMIC_PARTITIONS_PERNODE}}</value>
     <description>Maximum number of dynamic partitions allowed to be created in each mapper/reducer node.</description>
   </property>
   <property>
