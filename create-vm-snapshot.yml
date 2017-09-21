@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+    - name: "创建镜像"
+      delegate_to: 127.0.0.1
+      command: "vboxmanage snapshot {{inventory_hostname}} take done"
