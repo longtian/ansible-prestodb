@@ -1,0 +1,11 @@
+{
+  "count all": {
+    "query": [
+      ".*"
+    ],
+    "schema": [
+      "default"
+    ],
+    "session": {}
+  }
+}
