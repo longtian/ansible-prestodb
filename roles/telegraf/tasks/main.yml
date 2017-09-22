@@ -5,6 +5,7 @@
     path: "/var/log/telegraf/telegraf.log"
     owner: telegraf
     group: telegraf
+    state: touch
 
 - name: 生成 telegraf 配置文件
   template:
