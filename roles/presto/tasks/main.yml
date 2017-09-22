@@ -39,6 +39,21 @@
     src: "{{presto_role}}-config.properties"
     dest: "{{PRESTO_HOME}}/etc/config.properties"
 
+- name: 生成 Presto Jolokia 配置文件
+  template:
+    src: "jolokia/presto.conf"
+    dest: "{{TELEGRAF_CONFIG_DIR}}/presto.conf"
+
+- name: 生成 Presto coordinator 配置文件
+  template:
+    src: "jolokia/presto-coordinator.conf"
+    dest: "{{TELEGRAF_CONFIG_DIR}}/presto-coordinator.conf"
+  when: "presto_role == 'coordinator'"
+
+- service:
+    name: telegraf
+    state: restarted
+
 - name: 生成 Presto 的 Catalog 文件
   template:
     src: "catalog/{{item}}"
