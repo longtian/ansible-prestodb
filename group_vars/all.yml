@@ -36,3 +36,5 @@ HIVE_HOME: "{{ROOT}}/apache-hive-{{HIVE_VERSION}}-bin"
 ZEPPELIN_HOME: "{{ROOT}}/zeppelin-0.7.2-bin-all"
 
 DEFAULT_VM_SNAPSHOT: "done"
+
+TELEGRAF_CONFIG_DIR: "/etc/telegraf/telegraf.d"

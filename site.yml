@@ -4,6 +4,7 @@
     - base
     - supervisord
     - jdk
+    - telegraf
 
 - hosts: namenode,datanode
   roles:
