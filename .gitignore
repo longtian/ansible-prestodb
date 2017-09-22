@@ -1,3 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
 *.retry
 /files
+/experiments/benchmark/presto-benchmark-driver-0.183-executable.jar
