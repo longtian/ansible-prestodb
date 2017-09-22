@@ -1,0 +1,5 @@
+suite	query	wallTimeP50	wallTimeMean	wallTimeStd	processCpuTimeP50	processCpuTimeMean	processCpuTimeStd	queryCpuTimeP50	queryCpuTimeMean	queryCpuTimeStd	status	error
+count all	bucketed	1252	1243	120	2140	2164	218	927	938	25	pass	
+count all	orc	1269	1324	143	2000	2006	66	951	956	17	pass	
+count all	csv	1742	1699	140	2570	2489	221	1407	1340	136	pass	
+count all	partitioned	2610	2618	219	4160	4123	209	1458	1464	42	pass	
