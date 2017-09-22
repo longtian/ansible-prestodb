@@ -1,0 +1,24 @@
+---
+- name: 安装 Telegraf
+  yum:
+    enablerepo: testin
+    disablerepo: "*"
+    name: "telegraf"
+    state: present
+- name: 安装 NTP
+  package:
+    enablerepo: testin
+    disablerepo: "*"
+    name: ntp
+    state: present
+- name: 启动 NTP
+  service:
+    name: ntpd
+    state: started
+- name: 创建 Telegraf 目录
+  file:
+    path: "{{TELEGRAF_CONFIG_DIR}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
